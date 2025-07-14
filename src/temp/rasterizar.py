@@ -1,8 +1,15 @@
-from PIL import Image, ImageDraw
 import numpy as np
+from PIL import Image, ImageDraw
+
+from src.objetos.solidos import ItemAresta, ItemFace
+
+Faces = list[ItemFace]
+Arestas = list[ItemAresta]
+Vertices = np.typing.NDArray[np.float64]
+Elementos = tuple[Vertices, Arestas, Faces]
 
 
-def rasterizar_objetos(objetos_2d, resolucao=(300, 300)):
+def rasterizar_objetos(objetos_2d: list[Elementos], resolucao=(300, 300)) -> Image.Image:
     """
     Rasteriza com ocultação de arestas atrás de faces:
       • Ordena objetos por profundidade média (farthest first).
@@ -21,7 +28,7 @@ def rasterizar_objetos(objetos_2d, resolucao=(300, 300)):
     span[span == 0] = 1e-6
 
     # 2) Converte cada objeto em coords de pixel e calcula profundidade média
-    lista = []
+    lista: list[tuple[float, np.ndarray, Arestas, Faces]] = []
     for v_proj, arestas, faces, *_ in objetos_2d:
         # normaliza → [0,1]
         norm = (v_proj[:, :2] - mn) / span
@@ -42,11 +49,12 @@ def rasterizar_objetos(objetos_2d, resolucao=(300, 300)):
     for _, pix, arestas, faces in lista:
         # 4a) faces (preenchimento)
         if faces:
-            for *idxs, cor in faces:
-                poly = [tuple(pix[i]) for i in idxs]
-                draw.polygon(poly, fill=cor)
+            for f in faces:
+                a = [arestas[i] for i in f.arestas]
+                poly = [tuple(pix[i.vertice_inicial]) for i in a]
+                draw.polygon(poly, fill=f.cor)
         # 4b) arestas (wireframe)
-        for i, j, cor in arestas:
-            draw.line([tuple(pix[i]), tuple(pix[j])], fill=cor, width=2)
+        for a in arestas:
+            draw.line([tuple(pix[a.vertice_inicial]), tuple(pix[a.vertice_final])], fill=a.cor, width=2)
 
     return img

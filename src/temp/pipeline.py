@@ -86,7 +86,7 @@ def plot2D(objects: list[ISolido], title: str = "Object 2D"):
         vertices, arestas, faces = solido.get_vertices(), solido.get_arestas(), solido.get_faces()
         # Arestas (linhas)
         for aresta in arestas:
-            i, j, cor = aresta.vertice_incial, aresta.vertice_final, aresta.cor
+            i, j, cor = aresta.vertice_inicial, aresta.vertice_final, aresta.cor
 
             x_coords = [vertices[i][0], vertices[j][0]]
             y_coords = [vertices[i][1], vertices[j][1]]
@@ -99,7 +99,7 @@ def plot2D(objects: list[ISolido], title: str = "Object 2D"):
             x_coords = []
             y_coords = []
             for i_aresta in arestas_da_face:
-                i_vertice = arestas[i_aresta].vertice_incial
+                i_vertice = arestas[i_aresta].vertice_inicial
                 coordenada_x, coordenada_y = vertices[i_vertice].get_coordenadas()
                 # print(f'coordenada x é: {coordenada_x}')
                 x_coords.append(coordenada_x)

@@ -32,3 +32,7 @@ class SegmentoDeReta(ISolido):
 
     def get_faces(self) -> list[ItemFace]:
         return []
+
+    def __str__(self) -> str:
+        inicio, fim = self._vertices
+        return f'Segmento<{inicio} -> {fim}>'

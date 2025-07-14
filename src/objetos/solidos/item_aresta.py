@@ -5,13 +5,13 @@ from ..colorset import ColorName
 
 @dataclass
 class ItemAresta:
-    vertice_incial: int
+    vertice_inicial: int
     vertice_final: int
     cor: ColorName = 'black'
 
     def __getitem__(self, key: int) -> int:
         if key == 0:
-            return self.vertice_incial
+            return self.vertice_inicial
 
         if key == 1:
             return self.vertice_final

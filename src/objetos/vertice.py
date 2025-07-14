@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from numbers import Number
+from typing import Self
 
 import numpy as np
 from numpy.typing import NDArray
@@ -24,6 +25,9 @@ class IVertice(ABC):
 
     @abstractmethod
     def get_coordenadas(self) -> NDArray[np.float64]: ...
+
+    @abstractmethod
+    def get_coordenadas_homogeneas(self) -> NDArray[np.float64]: ...
 
     def distance(self, other) -> Number:
         assert isinstance(other, self.__class__), self._DEFAULT_VALUE_ERROR % type(other)
@@ -73,9 +77,12 @@ class Vertice2D(IVertice):
     _ORIGEM = None
 
     def __init__(self, x: float, y: float) -> None:
-        self._coordenadas = np.array([x, y], dtype=np.float64)
+        self._coordenadas = np.array([x, y, 1], dtype=np.float64)
 
     def get_coordenadas(self) -> NDArray[np.float64]:
+        return self._coordenadas[:2]
+
+    def get_coordenadas_homogeneas(self):
         return self._coordenadas
 
     @classmethod
@@ -87,16 +94,19 @@ class Vertice3D(IVertice):
     _ORIGEM = None
 
     def __init__(self, x: float, y: float, z: float) -> None:
-        self._coordenadas = np.array([x, y, z], dtype=np.float64)
+        self._coordenadas = np.array([x, y, z, 1], dtype=np.float64)
 
     def get_coordenadas(self) -> NDArray[np.float64]:
+        return self._coordenadas[:3]
+
+    def get_coordenadas_homogeneas(self):
         return self._coordenadas
 
     @classmethod
     def get_numero_dimensoes(cls) -> int:
         return 3
 
-    def produto_vetorial(self, other):
+    def produto_vetorial(self, other: Self):
         assert isinstance(other, Vertice3D)
         result = np.cross(self.get_coordenadas(), other.get_coordenadas())
         return self.__class__(*result)
