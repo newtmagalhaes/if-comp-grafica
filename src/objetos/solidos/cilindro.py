@@ -11,60 +11,60 @@ from .isolido import ISolido
 class Cilindro(ISolido):
     def __init__(
             self,
-            radius: float,
-            height: float,
-            segments: int = 20,
-            origin: Vertice3D = Vertice3D.ORIGEM(),
-            edge_color: ColorName = "purple",
-            face_color: ColorName = "purple",
+            raio: float,
+            altura: float,
+            segmentos: int = 20,
+            origem: Vertice3D = Vertice3D.ORIGEM(),
+            cor_arestas: ColorName = "purple",
+            cor_faces: ColorName = "purple",
             ):
-        self.radius = radius
-        self.height = height
-        self.segments = segments
-        self.origin = origin
-        self.edge_color = edge_color
-        self.face_color = face_color
+        self.raio = raio
+        self.altura = altura
+        self.segmentos = segmentos
+        self.origem = origem
+        self.cor_arestas = cor_arestas
+        self.cor_faces = cor_faces
 
-        x0, y0, z0 = self.origin.get_coordenadas()
+        x0, y0, z0 = self.origem.get_coordenadas()
 
         # Ângulos igualmente espaçados para os vértices circulares
-        self.angles = np.linspace(0, 2 * np.pi, segments, endpoint=False)
+        self.angles = np.linspace(0, 2 * np.pi, segmentos, endpoint=False)
 
         # Base inferior (z = z0)
         base = np.array([
-            [x0 + radius * np.cos(a), y0 + radius * np.sin(a), z0]
+            [x0 + raio * np.cos(a), y0 + raio * np.sin(a), z0]
             for a in self.angles
         ])
         # Base superior (z = z0 + altura)
         top = base.copy()
-        top[:, 2] = z0 + height
+        top[:, 2] = z0 + altura
 
         self._vertices = [Vertice3D(*coords) for coords in np.vstack([base, top])]
 
         # Faces: base, topo, laterais (como quads)
         faces = [
             # face inferior
-            ItemFace(list(range(0, 3 * segments, 3)), face_color),
+            ItemFace(list(range(0, 3 * segmentos, 3)), cor_faces),
             # face superior
-            ItemFace(list(range(1, 3 * segments, 3)), face_color),
+            ItemFace(list(range(1, 3 * segmentos, 3)), cor_faces),
         ]
         # Arestas: círculo da base, círculo do topo, verticais
         arestas = []
-        for vertice_atual in range(segments):
-            vertice_seguinte = (vertice_atual + 1) % segments
-            vertice_topo = (vertice_atual + segments)
-            vertice_topo_seguinte = vertice_seguinte + segments
-            arestas.append(ItemAresta(vertice_atual, vertice_seguinte, edge_color))  # base
-            arestas.append(ItemAresta(vertice_topo, vertice_topo_seguinte, edge_color))  # topo
-            arestas.append(ItemAresta(vertice_seguinte, vertice_topo_seguinte, edge_color))  # lateral
+        for vertice_atual in range(segmentos):
+            vertice_seguinte = (vertice_atual + 1) % segmentos
+            vertice_topo = (vertice_atual + segmentos)
+            vertice_topo_seguinte = vertice_seguinte + segmentos
+            arestas.append(ItemAresta(vertice_atual, vertice_seguinte, cor_arestas))  # base
+            arestas.append(ItemAresta(vertice_topo, vertice_topo_seguinte, cor_arestas))  # topo
+            arestas.append(ItemAresta(vertice_seguinte, vertice_topo_seguinte, cor_arestas))  # lateral
 
             posicao_aresta_base = 3 * vertice_atual
             faces.append(ItemFace([
                 posicao_aresta_base,
-                (posicao_aresta_base + 2) % (3 * segments),
-                -1 * ((posicao_aresta_base + 1) % (3 * segments)),
-                -1 * ((posicao_aresta_base - 1) % (3 * segments)),
-            ], face_color))
+                (posicao_aresta_base + 2) % (3 * segmentos),
+                -1 * ((posicao_aresta_base + 1) % (3 * segmentos)),
+                -1 * ((posicao_aresta_base - 1) % (3 * segmentos)),
+            ], cor_faces))
 
         self._faces = faces
         self._arestas = arestas

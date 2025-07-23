@@ -6,7 +6,7 @@ from src.objetos.vertice import Vertice3D
 from src.pipeline import Pipeline
 
 c = Cubo.criar_em(Vertice3D(0, 0, 0), 1)
-c2 = Cilindro(0.5, 2, origin=Vertice3D(3, 0, 0), edge_color='black')
+c2 = Cilindro(0.5, 2, origem=Vertice3D(3, 0, 0), cor_arestas='black')
 
 solidos: list[ISolido] = [
     c,

@@ -21,7 +21,7 @@ t2 = Tetraedro(
     Vertice3D(2, 1, 1.5),
 )
 c = Cubo.criar_em(Vertice3D(0, 0, 0), 1)  # type: ignore
-c2 = Cilindro(0.5, 2, origin=Vertice3D(3, 0, 0), edge_color='black')
+c2 = Cilindro(0.5, 2, origem=Vertice3D(3, 0, 0), cor_arestas='black')
 
 solidos: list[ISolido] = [
     c,
