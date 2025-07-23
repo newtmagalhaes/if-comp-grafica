@@ -1,7 +1,6 @@
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
-import numpy as np
-from numpy.typing import NDArray
 from mpl_toolkits.mplot3d.art3d import Line3DCollection, Poly3DCollection
 
 from src.objetos.solidos.isolido import ISolido
@@ -39,7 +38,9 @@ def plot3D(objects, title: str = "Object", ax: Axes | None = None):
             line_colors = []
 
             for aresta in arestas:
-                i, j, cor = aresta  # agora pegamos os 3 elementos
+                i = aresta.vertice_inicial
+                j = aresta.vertice_final
+                cor = aresta.cor
 
                 # Monta a linha
                 linha = [
@@ -58,10 +59,15 @@ def plot3D(objects, title: str = "Object", ax: Axes | None = None):
             face_colors = []
             for face in faces:
                 # Separa todos os índices da cor:
-                *indices, cor = face
+                cor = face.cor
+                indices = face.get_arestas(arestas)
 
                 # Constrói a lista de vértices (x, y, z) da face:
-                poly = [(vertices[i][0], vertices[i][1], vertices[i][2]) for i in indices]
+
+                poly = [
+                    (vertices[a.vertice_inicial][0], vertices[a.vertice_inicial][1], vertices[a.vertice_inicial][2])
+                    for a in indices
+                ]
 
                 polys.append(poly)
                 face_colors.append(cor)
