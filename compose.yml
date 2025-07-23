@@ -1,0 +1,6 @@
+services:
+  proj:
+    container_name: projeto
+    build: .
+    volumes:
+      - ./output:/project/output/
