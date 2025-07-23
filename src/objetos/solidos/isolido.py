@@ -14,3 +14,7 @@ class ISolido(ABC):
 
     @abstractmethod
     def get_faces(self) -> list[ItemFace]: ...
+
+    def centro(self) -> IVertice:
+        numero_vertices = len(self.get_vertices())
+        return sum(self.get_vertices(), start=self.get_vertices()[0].ORIGEM()) / numero_vertices

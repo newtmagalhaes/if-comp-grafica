@@ -16,11 +16,12 @@ class Tetraedro(ISolido):
             ItemAresta(1, 3),
             ItemAresta(2, 3),
         ]
+        cor_face = 'green'
         self._faces = [
-            ItemFace([0, 1, 2]),
-            ItemFace([0, 4, 3]),
-            ItemFace([1, 5, 4]),
-            ItemFace([2, 3, 5]),
+            ItemFace([0, 1, 2], cor_face),
+            ItemFace([0, 4, -3], cor_face),
+            ItemFace([1, 5, -4], cor_face),
+            ItemFace([2, 3, -5], cor_face),
         ]
 
     def get_vertices(self) -> list[IVertice]:
